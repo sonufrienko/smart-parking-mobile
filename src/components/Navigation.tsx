@@ -5,6 +5,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import HomeScreen from '../screens/Home';
 import ParkScreen from '../screens/Park';
 import AccountScreen from '../screens/Account';
+import { Text } from 'react-native';
 
 const HomeStack = createStackNavigator(
   {
@@ -72,9 +73,9 @@ const materialBottomTabNavigatorConfig = {
 export default createAppContainer(
   createMaterialBottomTabNavigator(
     {
-      Home: HomeStack,
-      Park: ParkStack,
-      Account: AccountStack
+      HomeStack,
+      ParkStack,
+      AccountStack
     },
     materialBottomTabNavigatorConfig
   )
