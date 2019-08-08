@@ -1,10 +1,8 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import Account from '../components/Account';
 
-export default function HomeScreen() {
+export default function AccountScreen() {
   return (
-    <View>
-      <Text>Account Screen</Text>
-    </View>
+    <Account />
   );
 }
