@@ -51,9 +51,9 @@ const AccountStack = createStackNavigator(
 );
 
 const navigationIcons = new Map([
-  ['Home', 'place'], 
-  ['Park', 'local-parking'], 
-  ['Account', 'person']
+  ['HomeStack', 'place'], 
+  ['ParkStack', 'local-parking'], 
+  ['AccountStack', 'person']
 ]);
 
 const materialBottomTabNavigatorConfig = {
