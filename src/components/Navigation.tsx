@@ -1,10 +1,53 @@
 import React from 'react';
-import { createAppContainer, TabBarIconProps } from 'react-navigation';
+import { createStackNavigator, createAppContainer, TabBarIconProps } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import HomeScreen from '../screens/Home';
 import ParkScreen from '../screens/Park';
 import AccountScreen from '../screens/Account';
+
+const HomeStack = createStackNavigator(
+  {
+    Home: HomeScreen
+  },
+  {
+    initialRouteName: "Home",
+    headerMode: "none",
+    navigationOptions: {
+      title: 'Map',
+    }
+  }
+);
+
+const ParkStack = createStackNavigator(
+  {
+    Park: ParkScreen
+  },
+  {
+    initialRouteName: "Park",
+    navigationOptions: {
+      title: 'Park',
+    },
+    defaultNavigationOptions: {
+      title: 'Park'
+    }
+  }
+);
+
+const AccountStack = createStackNavigator(
+  {
+    Account: AccountScreen
+  },
+  {
+    initialRouteName: "Account",
+    navigationOptions: {
+      title: 'Account',
+    },
+    defaultNavigationOptions: {
+      title: 'Account'
+    }
+  }
+);
 
 const navigationIcons = new Map([
   ['Home', 'place'],
@@ -29,24 +72,9 @@ const materialBottomTabNavigatorConfig = {
 export default createAppContainer(
   createMaterialBottomTabNavigator(
     {
-      Home: {
-        screen: HomeScreen,
-        navigationOptions: () => ({
-          title: 'Map'
-        })
-      },
-      Park: {
-        screen: ParkScreen,
-        navigationOptions: () => ({
-          title: 'Park'
-        })
-      },
-      Account: {
-        screen: AccountScreen,
-        navigationOptions: () => ({
-          title: 'Account'
-        })
-      }
+      Home: HomeStack,
+      Park: ParkStack,
+      Account: AccountStack
     },
     materialBottomTabNavigatorConfig
   )
