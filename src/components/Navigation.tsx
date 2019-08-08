@@ -12,10 +12,10 @@ const HomeStack = createStackNavigator(
     Home: HomeScreen
   },
   {
-    initialRouteName: "Home",
-    headerMode: "none",
+    initialRouteName: 'Home',
+    headerMode: 'none',
     navigationOptions: {
-      title: 'Map',
+      title: 'Map'
     }
   }
 );
@@ -25,9 +25,9 @@ const ParkStack = createStackNavigator(
     Park: ParkScreen
   },
   {
-    initialRouteName: "Park",
+    initialRouteName: 'Park',
     navigationOptions: {
-      title: 'Park',
+      title: 'Park'
     },
     defaultNavigationOptions: {
       title: 'Park'
@@ -40,9 +40,9 @@ const AccountStack = createStackNavigator(
     Account: AccountScreen
   },
   {
-    initialRouteName: "Account",
+    initialRouteName: 'Account',
     navigationOptions: {
-      title: 'Account',
+      title: 'Account'
     },
     defaultNavigationOptions: {
       title: 'Account'
@@ -51,9 +51,9 @@ const AccountStack = createStackNavigator(
 );
 
 const navigationIcons = new Map([
-  ['Home', 'place'],
-  ['Park', 'local-parking'],
-  ['Account', 'person'],
+  ['Home', 'place'], 
+  ['Park', 'local-parking'], 
+  ['Account', 'person']
 ]);
 
 const materialBottomTabNavigatorConfig = {
