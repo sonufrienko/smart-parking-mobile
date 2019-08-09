@@ -2,57 +2,53 @@ import React from 'react';
 import { createStackNavigator, createAppContainer, TabBarIconProps } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import HomeScreen from '../screens/Home';
-import ParkScreen from '../screens/Park';
-import AccountScreen from '../screens/Account';
-import { Text } from 'react-native';
+import MapHomeScreen from '../screens/MapHome';
+import ParkingHomeScreen from '../screens/ParkingHome';
+import AccountHomeScreen from '../screens/AccountHome';
+import ParkingDetailsScreen from '../screens/ParkingDetails';
+import ParkingHistoryScreen from '../screens/ParkingHistory';
 
-const HomeStack = createStackNavigator(
+const MapStack = createStackNavigator(
   {
-    Home: HomeScreen
+    MapHome: MapHomeScreen,
+    ParkingDetails: ParkingDetailsScreen
   },
   {
-    initialRouteName: 'Home',
-    headerMode: 'none',
+    initialRouteName: 'MapHome',
     navigationOptions: {
       title: 'Map'
     }
   }
 );
 
-const ParkStack = createStackNavigator(
+const ParkingStack = createStackNavigator(
   {
-    Park: ParkScreen
+    ParkingHome: ParkingHomeScreen,
+    ParkingHistory: ParkingHistoryScreen
   },
   {
-    initialRouteName: 'Park',
+    initialRouteName: 'ParkingHome',
     navigationOptions: {
-      title: 'Park'
-    },
-    defaultNavigationOptions: {
-      title: 'Park'
+      title: 'Parking'
     }
   }
 );
 
 const AccountStack = createStackNavigator(
   {
-    Account: AccountScreen
+    AccountHome: AccountHomeScreen
   },
   {
-    initialRouteName: 'Account',
+    initialRouteName: 'AccountHome',
     navigationOptions: {
-      title: 'Account'
-    },
-    defaultNavigationOptions: {
       title: 'Account'
     }
   }
 );
 
 const navigationIcons = new Map([
-  ['HomeStack', 'place'], 
-  ['ParkStack', 'local-parking'], 
+  ['MapStack', 'place'], 
+  ['ParkingStack', 'local-parking'], 
   ['AccountStack', 'person']
 ]);
 
@@ -63,7 +59,7 @@ const materialBottomTabNavigatorConfig = {
       return <Icon name={navigationIcons.get(routeName)} size={20} color={tintColor} />;
     },
     shifting: false,
-    initialRouteName: 'Home',
+    initialRouteName: 'MapHome',
     activeColor: '#1a73e8',
     inactiveColor: 'rgba(0, 0, 0, 0.5)',
     barStyle: { backgroundColor: '#ffffff' }
@@ -73,8 +69,8 @@ const materialBottomTabNavigatorConfig = {
 export default createAppContainer(
   createMaterialBottomTabNavigator(
     {
-      HomeStack,
-      ParkStack,
+      MapStack,
+      ParkingStack,
       AccountStack
     },
     materialBottomTabNavigatorConfig
