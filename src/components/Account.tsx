@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, Button } from 'react-native';
+import { Text, View, ScrollView, Button, StyleSheet } from 'react-native';
 import { Auth } from 'aws-amplify';
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   }
-};
+});
 
 export default function AccountContainer() {
   const [userData, setUserData] = useState({
