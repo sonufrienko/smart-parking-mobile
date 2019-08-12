@@ -8,7 +8,7 @@ function ParkingDetailsScreen() {
 }
 
 ParkingDetailsScreen.navigationOptions = ({ navigation }) => ({
-  title: navigation.state.params.parking.title
+  title: 'Parking Details'
 });
 
 export default ParkingDetailsScreen;
