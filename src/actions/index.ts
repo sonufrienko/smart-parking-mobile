@@ -12,14 +12,21 @@ export const selectParking = (parkingId) => {
   }
 }
 
-export const startParking = ({ vehicleId, plateNumber, slotNumber }) => {
+type StartParking = {
+  vehicleId: number,
+  plateNumber: string,
+  slotNumber: string,
+  navigation: any
+}
+
+export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }: StartParking) => {
   return (dispatch, getState) => {
     dispatch({
        type: START_PARKING_PENDING 
     });
 
     setTimeout(() => {
-      const { user, map: { selectedParkingId } } = getState();
+      const { account: { user }, map: { selectedParkingId } } = getState();
 
       dispatch({
         type: START_PARKING_SUCCESS,
@@ -31,6 +38,10 @@ export const startParking = ({ vehicleId, plateNumber, slotNumber }) => {
           parkingId: selectedParkingId
         }
       });
-      }, 3000);
+
+      navigation.popToTop();
+      navigation.navigate('ParkingHome');
+
+    }, 3000);
   }
 }
