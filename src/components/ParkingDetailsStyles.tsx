@@ -72,6 +72,23 @@ export default StyleSheet.create({
     borderRadius: 4,
     backgroundColor: 'rgba(0, 0, 0, 0.04)'
   },
+  ticketField: {
+    flex: 1,
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+    paddingTop: 4,
+    paddingBottom: 14,
+    marginBottom: 10
+  },
+  ticketFieldLeft: {
+    width: 50
+  },
+  icon: {
+    color: '#607D8B'
+  },
   grayColor: {
     color: '#acacac'
   },

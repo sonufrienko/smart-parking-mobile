@@ -1,9 +1,9 @@
 import React from 'react';
-import ParkingHome from '../components/ParkingHome';
+import ParkingTicket from '../components/ParkingTicket';
 
 function ParkingHomeScreen() {
   return (
-    <ParkingHome />
+    <ParkingTicket />
   );
 }
 
