@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, Button, StyleSheet } from 'react-native';
-import { Auth } from 'aws-amplify';
+import React from 'react'
+import { Text, View, ScrollView, StyleSheet } from 'react-native';
+import { withNavigation } from 'react-navigation';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,39 +11,30 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function AccountContainer() {
-  const [userData, setUserData] = useState({
-    attributes: {
-      email: '',
-      phone_number: ''
-    }
-  });
-
-  useEffect(() => {
-    async function fetchCurrentUser(){
-      try {
-        const user = await Auth.currentAuthenticatedUser();
-        setUserData(user); 
-      } catch (error) {
-        // TODO
-      }
-    }
-    
-    fetchCurrentUser();
-  });
-
-  const { attributes: { email, phone_number } } = userData;
-
-  return <UserDetails email={email} phone_number={phone_number} />
+type UserDetailsProps = {
+  user: {
+    id: string,
+    email: string,
+    phone: string
+  }
 }
 
-function UserDetails({ email = '', phone_number = '' }: { email: string, phone_number: string }) {
+function AccountContainer({ account }) {
+  const user = account.user;
+  return <UserDetails user={user} />
+}
+
+function UserDetails({ user: { id, email, phone } }: UserDetailsProps) {
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
       <View>
-      <Text>Email: {email}</Text>
-      <Text>Phone: {phone_number}</Text>
+        <Text>ID: {id}</Text>
+        <Text>Email: {email}</Text>
+        <Text>Phone: {phone}</Text>
       </View>
     </ScrollView>
   )
 }
+
+const mapStateToProps = ({ account }) => ({ account });
+export default connect(mapStateToProps, null)(withNavigation(AccountContainer));

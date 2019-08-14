@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useScreens } from 'react-native-screens';
 import Amplify, { Analytics } from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -8,6 +8,7 @@ import thunk from 'redux-thunk';
 import awsconfig from '../../aws-exports'
 import Navigation from './Navigation';
 import reducers from '../reducers'
+import * as actions from '../actions';
 
 const store = createStore(reducers, applyMiddleware(thunk));
 
@@ -16,6 +17,10 @@ Analytics.configure({ disabled: true });
 useScreens();
 
 function App() {
+  useEffect(() => {
+    store.dispatch(actions.fetchUser());
+  });
+
   return (
     <Provider store={store}>
       <Navigation />

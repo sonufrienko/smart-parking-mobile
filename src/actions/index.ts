@@ -1,8 +1,12 @@
-import { API, graphqlOperation } from 'aws-amplify';
+import { Auth, API, graphqlOperation } from 'aws-amplify';
 import * as mutations from '../graphql/mutations';
 
 export const SELECTED_PARKING = 'SELECTED_PARKING';
 export const CLEAR_SELECTED_PARKING = 'CLEAR_SELECTED_PARKING';
+
+export const FETCH_USER_PENDING = 'FETCH_USER_PENDING';
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
+export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
 
 export const START_PARKING_PENDING = 'START_PARKING_PENDING';
 export const START_PARKING_SUCCESS = 'START_PARKING_SUCCESS';
@@ -116,6 +120,25 @@ export const finishParking = () => {
       dispatch({ type: FINISH_PARKING_SUCCESS });
     } catch(err) {
       console.log(err);
+    }
+  }
+}
+
+export const fetchUser = () => {
+  return async (dispatch, getState) => {
+    dispatch({
+       type: FETCH_USER_PENDING 
+    });
+    
+    try {
+      const cognitoUser = await Auth.currentAuthenticatedUser();
+      dispatch({ type: FETCH_USER_SUCCESS, user: {
+        id: cognitoUser.attributes.sub,
+        email: cognitoUser.attributes.email,
+        phone: cognitoUser.attributes.phone_number
+      } });
+    } catch(error) {
+      dispatch({ type: FETCH_USER_FAILURE, error });
     }
   }
 }
