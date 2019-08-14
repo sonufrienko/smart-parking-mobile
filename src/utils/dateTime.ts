@@ -19,7 +19,7 @@ const getOpenStatus = ({ openHours, openMinutes, closeHours, closeMinutes }): bo
   return currentTime >= openTime && currentTime <= closeTime;
 }
 
-export default function getOpeningHoursFormatted(opening_hours: OpeningDays[]): string {
+export function getOpeningHoursFormatted(opening_hours: OpeningDays[]): string {
   const currentDate = new Date();
   const currentDay = currentDate.getDay();
   const day = opening_hours.find(item => item.open.day === currentDay);
@@ -40,4 +40,12 @@ export default function getOpeningHoursFormatted(opening_hours: OpeningDays[]): 
   const openStatus = getOpenStatus({ openHours, openMinutes, closeHours, closeMinutes }) ? 'Open' : 'Closed';
 
   return `${formatTimeNumber(openHours)}:${formatTimeNumber(openMinutes)} - ${formatTimeNumber(closeHours)}:${formatTimeNumber(closeMinutes)} (${openStatus})`;
+}
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export function getShortDateAndTime(dateStr) {
+  const date = new Date(Number(dateStr));
+  const weekday = WEEKDAYS[date.getDay()];
+  return `${weekday}, ${formatTimeNumber(date.getHours())}:${formatTimeNumber(date.getMinutes())}`;
 }
