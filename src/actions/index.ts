@@ -73,7 +73,6 @@ export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }:
       const response = await API.graphql(graphqlOperation(mutations.startParking, { input }));
       const data: StartParkingMutation = response.data;
       const invoice = data.startParking;
-      console.log(invoice);
 
       dispatch({
         type: START_PARKING_SUCCESS,
@@ -92,8 +91,8 @@ export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }:
 
       navigation.popToTop();
       navigation.navigate('ParkingHome');
-    } catch(err) {
-      console.log(err);
+    } catch(error) {
+      dispatch({ type: START_PARKING_FAILURE, error });
     }
   }
 }
@@ -118,8 +117,8 @@ export const finishParking = () => {
       await API.graphql(graphqlOperation(mutations.finishParking, { input }));
 
       dispatch({ type: FINISH_PARKING_SUCCESS });
-    } catch(err) {
-      console.log(err);
+    } catch(error) {
+      dispatch({ type: FINISH_PARKING_FAILURE, error });
     }
   }
 }
