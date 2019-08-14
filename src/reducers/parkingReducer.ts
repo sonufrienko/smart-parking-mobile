@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   history: [],
-  activeParking: null,
+  activeInvoice: {},
   loadingStartParking: false,
   loadingFinishParking: false
 }
@@ -22,7 +22,7 @@ export default (state = initialState, action) => {
     case START_PARKING_SUCCESS:
       return {
         ...state,
-        activeParking: action.invoice,
+        activeInvoice: action.invoice,
         loadingStartParking: false
       }
 
