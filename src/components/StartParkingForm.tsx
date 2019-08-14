@@ -54,7 +54,8 @@ const slotNumberRule = RegExp('^[A-Za-z0-9]{2,6}$');
 const isSlotNumberValid = (slotNumber: string):boolean => slotNumber && slotNumberRule.test(slotNumber);
 
 export default function StartParkingForm({ vehicles, onSubmit, isLoading, buttonTitle, slotNumberTitle, vehicleSelectTitle }) {
-  const [selectedVehicle, setVehicle] = useState({ id: 0, plateNumber: '' });
+  const [ firstVehicle ] = vehicles;
+  const [selectedVehicle, setVehicle] = useState({ id: firstVehicle.id, plateNumber: firstVehicle.plateNumber });
   const [slotNumber, setSlotNumber] = useState('');
   const slotNumberIsValid = isSlotNumberValid(slotNumber);
 
