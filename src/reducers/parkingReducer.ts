@@ -1,7 +1,10 @@
 import { 
   START_PARKING_PENDING,
   START_PARKING_SUCCESS,
-  START_PARKING_FAILURE
+  START_PARKING_FAILURE,
+  FINISH_PARKING_PENDING,
+  FINISH_PARKING_SUCCESS,
+  FINISH_PARKING_FAILURE
 } from '../actions';
 
 const initialState = {
@@ -30,6 +33,19 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loadingStartParking: false
+      }
+
+    case FINISH_PARKING_PENDING:
+      return {
+        ...state,
+        loadingFinishParking: true
+      }
+
+    case FINISH_PARKING_SUCCESS:
+      return {
+        ...state,
+        loadingFinishParking: false,
+        activeTicket: null
       }
 
     default:

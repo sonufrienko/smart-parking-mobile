@@ -60,9 +60,7 @@ function ParkingTicketContainer(props: ScreenProps) {
         <Button 
           disabled={loadingFinishParking}
           title="Finish Parking" 
-          onPress={() => {
-            finishParking();
-          }} 
+          onPress={finishParking} 
         />
       </View>
     </ScrollView>
@@ -73,7 +71,7 @@ const mapStateToProps = ({ map, account, parking }) => ({ map, account, parking 
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   finishParking: () => {
-    alert('Finish');
+    dispatch(actions.finishParking());
   }
 });
 
