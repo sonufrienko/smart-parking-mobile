@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native';
 import { ScreenProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import getOpeningHoursFormatted from '../utils/getOpeningHoursFormatted';
+import { getOpeningHoursFormatted } from '../utils/dateTime';
 import styles from './ParkingDetailsStyles';
 import StartParkingForm from './StartParkingForm';
 import ParkingDetailsSection from './ParkingDetailsSection';
@@ -43,7 +43,8 @@ function ParkingDetailsContainer(props: ParkingDetailsContainerProps) {
   const { 
     map: { 
       selectedParkingId,
-      parkingList }, 
+      parkingList 
+    }, 
     account: { 
       vehicleList 
     }, 
