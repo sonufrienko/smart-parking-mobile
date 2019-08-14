@@ -8,7 +8,7 @@ function ParkingHomeScreen() {
 }
 
 ParkingHomeScreen.navigationOptions = {
-  title: 'Parking ticket'
+  title: 'Parking Ticket'
 };
 
 export default ParkingHomeScreen;
