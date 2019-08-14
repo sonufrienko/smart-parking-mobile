@@ -13,8 +13,8 @@ const initialState = {
     features: [ 'Electric Car Charging' ],
     rate: 5,
     location: {
-      lat: 52.378645,
-      lng: 4.896876
+      latitude: 52.378645,
+      longitude: 4.896876
     },
     address: {
       country_code: 'NL',
@@ -79,8 +79,8 @@ const initialState = {
     features: [],
     rate: 4,
     location: {
-      lat: 52.376381,
-      lng: 4.894599
+      latitude: 52.376381,
+      longitude: 4.894599
     },
     address: {
       country_code: 'NL',
