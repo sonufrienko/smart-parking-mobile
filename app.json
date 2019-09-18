@@ -28,7 +28,10 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.company.smartparking"
+      "package": "com.company.smartparking",
+      "config": {
+        "googleMaps": { "apiKey": "" }   
+     }
     }
   }
 }
