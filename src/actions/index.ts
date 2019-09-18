@@ -1,5 +1,7 @@
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import * as mutations from '../graphql/mutations';
+import * as queries from '../graphql/queries';
+import { ParkingResponse } from '../types';
 
 export const SELECTED_PARKING = 'SELECTED_PARKING';
 export const CLEAR_SELECTED_PARKING = 'CLEAR_SELECTED_PARKING';
@@ -15,6 +17,10 @@ export const START_PARKING_FAILURE = 'START_PARKING_FAILURE';
 export const FINISH_PARKING_PENDING = 'FINISH_PARKING_PENDING';
 export const FINISH_PARKING_SUCCESS = 'FINISH_PARKING_SUCCESS';
 export const FINISH_PARKING_FAILURE = 'FINISH_PARKING_FAILURE';
+
+export const FETCH_PARKING_PENDING = 'FETCH_PARKING_PENDING';
+export const FETCH_PARKING_SUCCESS = 'FETCH_PARKING_SUCCESS';
+export const FETCH_PARKING_FAILURE = 'FETCH_PARKING_FAILURE';
 
 export const selectParking = (parkingId) => {
   return {
@@ -141,3 +147,20 @@ export const fetchUser = () => {
     }
   }
 }
+
+export const fetchParkingList = () => async (dispatch) => {
+    dispatch({ type: FETCH_PARKING_PENDING });
+    
+    try {
+      const response: ParkingResponse = await API.graphql(graphqlOperation(queries.parkingListWithoutSlots));
+      const { data: { parking } } = response;
+
+      dispatch({
+        type: FETCH_PARKING_SUCCESS,
+        payload: parking
+      });
+
+    } catch(error) {
+      dispatch({ type: FETCH_PARKING_FAILURE, error });
+    }
+  }
