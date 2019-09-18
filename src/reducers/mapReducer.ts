@@ -1,7 +1,4 @@
-import { 
-  SELECTED_PARKING, 
-  CLEAR_SELECTED_PARKING 
-} from '../actions';
+import { ActionType } from '../types';
 
 const initialState = {
   location: null,
@@ -133,13 +130,13 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SELECTED_PARKING:
+    case ActionType.SELECTED_PARKING:
       return {
         ...state,
         selectedParkingId: action.parkingId
       }
 
-    case CLEAR_SELECTED_PARKING:
+    case ActionType.CLEAR_SELECTED_PARKING:
       return {
         ...state,
         selectedParkingId: null

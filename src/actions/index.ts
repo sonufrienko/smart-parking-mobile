@@ -1,30 +1,11 @@
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import * as mutations from '../graphql/mutations';
 import * as queries from '../graphql/queries';
-import { ParkingResponse } from '../types';
-
-export const SELECTED_PARKING = 'SELECTED_PARKING';
-export const CLEAR_SELECTED_PARKING = 'CLEAR_SELECTED_PARKING';
-
-export const FETCH_USER_PENDING = 'FETCH_USER_PENDING';
-export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
-export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
-
-export const START_PARKING_PENDING = 'START_PARKING_PENDING';
-export const START_PARKING_SUCCESS = 'START_PARKING_SUCCESS';
-export const START_PARKING_FAILURE = 'START_PARKING_FAILURE';
-
-export const FINISH_PARKING_PENDING = 'FINISH_PARKING_PENDING';
-export const FINISH_PARKING_SUCCESS = 'FINISH_PARKING_SUCCESS';
-export const FINISH_PARKING_FAILURE = 'FINISH_PARKING_FAILURE';
-
-export const FETCH_PARKING_PENDING = 'FETCH_PARKING_PENDING';
-export const FETCH_PARKING_SUCCESS = 'FETCH_PARKING_SUCCESS';
-export const FETCH_PARKING_FAILURE = 'FETCH_PARKING_FAILURE';
+import { ParkingResponse, ActionType } from '../types';
 
 export const selectParking = (parkingId) => {
   return {
-    type: SELECTED_PARKING,
+    type: ActionType.SELECTED_PARKING,
     parkingId
   }
 }
@@ -61,7 +42,7 @@ type FinishParkingInput = {
 export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }: StartParking) => {
   return async (dispatch, getState) => {
     dispatch({
-       type: START_PARKING_PENDING 
+       type: ActionType.START_PARKING_PENDING 
     });
 
     const { 
@@ -81,7 +62,7 @@ export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }:
       const invoice = data.startParking;
 
       dispatch({
-        type: START_PARKING_SUCCESS,
+        type: ActionType.START_PARKING_SUCCESS,
         invoice: {
           invoiceId: invoice.Id,
           dateFrom: invoice.DateFrom,
@@ -98,7 +79,7 @@ export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }:
       navigation.popToTop();
       navigation.navigate('ParkingHome');
     } catch(error) {
-      dispatch({ type: START_PARKING_FAILURE, error });
+      dispatch({ type: ActionType.START_PARKING_FAILURE, error });
     }
   }
 }
@@ -106,7 +87,7 @@ export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }:
 export const finishParking = () => {
   return async (dispatch, getState) => {
     dispatch({
-       type: FINISH_PARKING_PENDING 
+       type: ActionType.FINISH_PARKING_PENDING 
     });
 
     const { 
@@ -122,9 +103,9 @@ export const finishParking = () => {
       
       await API.graphql(graphqlOperation(mutations.finishParking, { input }));
 
-      dispatch({ type: FINISH_PARKING_SUCCESS });
+      dispatch({ type: ActionType.FINISH_PARKING_SUCCESS });
     } catch(error) {
-      dispatch({ type: FINISH_PARKING_FAILURE, error });
+      dispatch({ type: ActionType.FINISH_PARKING_FAILURE, error });
     }
   }
 }
@@ -132,35 +113,35 @@ export const finishParking = () => {
 export const fetchUser = () => {
   return async (dispatch, getState) => {
     dispatch({
-       type: FETCH_USER_PENDING 
+       type: ActionType.FETCH_USER_PENDING 
     });
     
     try {
       const cognitoUser = await Auth.currentAuthenticatedUser();
-      dispatch({ type: FETCH_USER_SUCCESS, user: {
+      dispatch({ type: ActionType.FETCH_USER_SUCCESS, user: {
         id: cognitoUser.attributes.sub,
         email: cognitoUser.attributes.email,
         phone: cognitoUser.attributes.phone_number
       } });
     } catch(error) {
-      dispatch({ type: FETCH_USER_FAILURE, error });
+      dispatch({ type: ActionType.FETCH_USER_FAILURE, error });
     }
   }
 }
 
 export const fetchParkingList = () => async (dispatch) => {
-    dispatch({ type: FETCH_PARKING_PENDING });
+    dispatch({ type: ActionType.FETCH_PARKING_PENDING });
     
     try {
       const response: ParkingResponse = await API.graphql(graphqlOperation(queries.parkingListWithoutSlots));
       const { data: { parking } } = response;
 
       dispatch({
-        type: FETCH_PARKING_SUCCESS,
+        type: ActionType.FETCH_PARKING_SUCCESS,
         payload: parking
       });
 
     } catch(error) {
-      dispatch({ type: FETCH_PARKING_FAILURE, error });
+      dispatch({ type: ActionType.FETCH_PARKING_FAILURE, error });
     }
   }

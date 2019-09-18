@@ -1,11 +1,4 @@
-import { 
-  START_PARKING_PENDING,
-  START_PARKING_SUCCESS,
-  START_PARKING_FAILURE,
-  FINISH_PARKING_PENDING,
-  FINISH_PARKING_SUCCESS,
-  FINISH_PARKING_FAILURE
-} from '../actions';
+import { ActionType } from '../types';
 
 const initialState = {
   history: [],
@@ -16,32 +9,32 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case START_PARKING_PENDING:
+    case ActionType.START_PARKING_PENDING:
       return {
         ...state,
         loadingStartParking: true
       }
 
-    case START_PARKING_SUCCESS:
+    case ActionType.START_PARKING_SUCCESS:
       return {
         ...state,
         activeTicket: action.invoice,
         loadingStartParking: false
       }
 
-    case START_PARKING_FAILURE:
+    case ActionType.START_PARKING_FAILURE:
       return {
         ...state,
         loadingStartParking: false
       }
 
-    case FINISH_PARKING_PENDING:
+    case ActionType.FINISH_PARKING_PENDING:
       return {
         ...state,
         loadingFinishParking: true
       }
 
-    case FINISH_PARKING_SUCCESS:
+    case ActionType.FINISH_PARKING_SUCCESS:
       return {
         ...state,
         loadingFinishParking: false,
