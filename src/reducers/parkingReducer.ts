@@ -1,13 +1,13 @@
-import { ActionType } from '../types';
+import { ActionType, Action, ParkingState } from '../types';
 
-const initialState = {
+const initialState: ParkingState = {
   history: [],
   activeTicket: null,
   loadingStartParking: false,
   loadingFinishParking: false
 }
 
-export default (state = initialState, action) => {
+export default (state: ParkingState = initialState, action: Action): ParkingState => {
   switch (action.type) {
     case ActionType.START_PARKING_PENDING:
       return {
