@@ -15,9 +15,22 @@ export type Parking = {
     latitude: number | null,
     longitude: number | null,
   },
-  openingHours: string | null,
+  openingHours: Array<{
+    __typename: "WorkDay",
+    open: {
+      __typename: "DayAndTime",
+      day: number,
+      time: string | null,
+    } | null,
+    close: {
+      __typename: "DayAndTime",
+      day: number,
+      time: string | null,
+    } | null,
+  } | null> | null,
   rate: number | null,
   title: string,
+  freeSlots: number,
   slots: Array<{
     __typename: "Slot",
     parkingID: string | null,
