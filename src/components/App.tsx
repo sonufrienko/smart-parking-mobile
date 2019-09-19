@@ -19,7 +19,8 @@ useScreens();
 function App() {
   useEffect(() => {
     store.dispatch(actions.fetchUser());
-  });
+    store.dispatch(actions.fetchParkingList());
+  }, []);
 
   return (
     <Provider store={store}>
