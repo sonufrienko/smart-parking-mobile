@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Button, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ScreenProps, withNavigation } from 'react-navigation';
 import MapView, { Marker } from 'react-native-maps';
 import Constants from 'expo-constants';
@@ -7,6 +7,8 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import { Parking } from '../types';
+import { getOpeningHoursFormatted } from '../utils/dateTime';
 
 const styles = StyleSheet.create({
   statusBar: {
@@ -17,17 +19,8 @@ const styles = StyleSheet.create({
   }
 })
 
-type Parking = {
-  id: number,
-  title: string
-  location: {
-    latitude: number,
-    longitude: number
-  }
-}
-
 type MapProps = {
-  parkingList: Parking[],
+  parkingList: Array<Parking> | null,
   onParkingSelect(e: {
     nativeEvent: {
       id: string
@@ -36,17 +29,16 @@ type MapProps = {
 }
 
 function Map({ parkingList, onParkingSelect }: MapProps) {
-  const amsterdamLocation = {
-    latitude: 52.3783,
-    longitude: 4.8955,
-    latitudeDelta: 0.0212,
-    longitudeDelta: 0.0172
+  const [location, setLocation] = useState();
+
+  const initialRegion = { 
+    latitude: 37.787653, 
+    longitude: -122.420211,
+    latitudeDelta: 0.0066,
+    longitudeDelta: 0.0066
   };
 
-  const [location, setLocation] = useState();
-  const [region, setRegion] = useState(amsterdamLocation);
-
-  // JUST FOR DEMO - use Amsterdam location instead of my current
+  // TODO: Future feature
   // useEffect(() => {
   //   async function getLocation() {
   //     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -65,20 +57,22 @@ function Map({ parkingList, onParkingSelect }: MapProps) {
   //     });
   //   }
 
-  //   if(!location) {
-  //     getLocation();
-  //   }
-  // });
+  //   getLocation();
+  // }, []);
 
   return (
     <View>
-      <MapView style={{ width: '100%', height: '100%' }} region={region}>
+      <MapView
+        style={{ width: '100%', height: '100%' }}
+        initialRegion={initialRegion}
+        showsUserLocation={true}
+      >
         {parkingList.map(parking => (
           <Marker
-            key={parking.id}
-            identifier={parking.id.toString()}
+            key={parking.parkingID}
+            identifier={parking.parkingID}
             onPress={onParkingSelect}
-            pinColor='red'
+            pinColor={getOpeningHoursFormatted(parking.openingHours) === 'Closed' ? 'tan' : 'red'}
             coordinate={parking.location}
           />
           )
@@ -95,7 +89,7 @@ function MapContainer(props: ScreenProps) {
   return <Map 
     parkingList={parkingList} 
     onParkingSelect={e => {
-      const parkingId = Number(e.nativeEvent.id);
+      const parkingId = e.nativeEvent.id;
       selectParking(parkingId);
       navigation.navigate('ParkingDetails');
     }} 
