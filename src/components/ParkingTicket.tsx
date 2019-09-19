@@ -7,11 +7,12 @@ import { getOpeningHoursFormatted, getShortDateAndTime } from '../utils/dateTime
 import styles from './ParkingDetailsStyles';
 import ParkingDetailsSection from './ParkingDetailsSection';
 import TicketInfo from './TicketInfo';
+import { Parking, Invoice, ParkingState, MapState, AccountState } from '../types';
 
-function ParkingInfo({ parking, invoice }) {
-  const { title, rate, address, opening_hours } = parking;
-  const addressFormatted = `${address.line1},\n${address.postal_code} ${address.city}`;
-  const openingHoursFormatted = getOpeningHoursFormatted(opening_hours);
+function ParkingInfo({ parking, invoice }: { parking: Parking, invoice: Invoice }) {
+  const { title, rate, address, openingHours } = parking;
+  const addressFormatted = `${address.line1},\n${address.postalCode} ${address.city}`;
+  const openingHoursFormatted = getOpeningHoursFormatted(openingHours);
   const parkingStartTimeFormatted = getShortDateAndTime(invoice.dateFrom);
 
   return <ParkingDetailsSection
@@ -26,7 +27,14 @@ function ParkingInfo({ parking, invoice }) {
   />
 }
 
-function ParkingTicketContainer(props: ScreenProps) {
+type ParkingTicketContainerProps = {
+  parking: ParkingState
+  map: MapState,
+  account: AccountState,
+  finishParking(): void
+}
+
+function ParkingTicketContainer(props: ParkingTicketContainerProps) {
   const { 
     parking: { 
       activeTicket,
@@ -36,7 +44,7 @@ function ParkingTicketContainer(props: ScreenProps) {
       parkingList 
     }, 
     account: {
-      vehicleList
+      user: { vehicles }
     },
     finishParking
   } = props;
@@ -49,8 +57,8 @@ function ParkingTicketContainer(props: ScreenProps) {
     );
   }
 
-  const parkingForInvoice = parkingList.find(item => item.id === activeTicket.parkingId);
-  const vehicleForInvoice = vehicleList.find(item => item.id === activeTicket.vehicleId);
+  const parkingForInvoice = parkingList.find(item => item.parkingID === activeTicket.parkingID);
+  const vehicleForInvoice = vehicles.find(item => item.plateNumber === activeTicket.plateNumber);
 
   return (
     <ScrollView>

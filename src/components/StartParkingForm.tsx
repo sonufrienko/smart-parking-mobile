@@ -1,46 +1,32 @@
 import React, { useState } from 'react';
 import { Text, View, Button, TextInput, Picker } from 'react-native';
 import styles from './ParkingDetailsStyles';
-
-type Vehicle = {
-  id: number,
-  make: string,
-  model: string
-  plateNumber: string
-}
-
-type SetVehicleParams = {
-  id: number, 
-  plateNumber: string
-}
+import { CreateInvoiceMutationVariables, Vehicle } from '../types';
 
 type VehicleSelectorProps = {
   vehicles: Vehicle[],
-  setVehicle(params: SetVehicleParams): void,
-  selectedVehicle: SetVehicleParams,
+  setVehicle(selectedPlateNumber: string | null): void,
+  selectedPlateNumber: string | null,
   vehicleSelectTitle: string
 }
 
-function VehicleSelector({ vehicles, setVehicle, selectedVehicle, vehicleSelectTitle }: VehicleSelectorProps) {
+function VehicleSelector({ vehicles, setVehicle, selectedPlateNumber, vehicleSelectTitle }: VehicleSelectorProps) {
   return (
     <View style={{ marginBottom: 20 }}>
         <Text style={styles.grayColor}>{vehicleSelectTitle}</Text>
         <View style={styles.formVehicleSelect}>
           <Picker
-            selectedValue={selectedVehicle.id}
+            selectedValue={selectedPlateNumber}
             onValueChange={itemValue => {
-              const vehicle = vehicles.find(item => item.id === itemValue);
-              setVehicle({
-                id: itemValue,
-                plateNumber: vehicle.plateNumber
-              });
+              const vehicle = vehicles.find(item => item.plateNumber === itemValue);
+              setVehicle(vehicle.plateNumber);
             }}>
             {
               vehicles.map(vehicle => 
                 <Picker.Item
-                  key={vehicle.id}
+                  key={vehicle.plateNumber}
                   label={`${vehicle.make} ${vehicle.model}, ${vehicle.plateNumber}`}
-                  value={vehicle.id} 
+                  value={vehicle.plateNumber} 
                 />
               )
             }
@@ -53,15 +39,32 @@ function VehicleSelector({ vehicles, setVehicle, selectedVehicle, vehicleSelectT
 const slotNumberRule = RegExp('^[A-Za-z0-9]{2,6}$');
 const isSlotNumberValid = (slotNumber: string):boolean => slotNumber && slotNumberRule.test(slotNumber);
 
-export default function StartParkingForm({ vehicles, onSubmit, isLoading, buttonTitle, slotNumberTitle, vehicleSelectTitle }) {
+type StartParkingFormProps = {
+  vehicles: Array<Vehicle>,
+  onSubmit(data: CreateInvoiceMutationVariables): void,
+  isLoading: boolean,
+  buttonTitle: string,
+  slotNumberTitle: string, 
+  vehicleSelectTitle: string,
+  selectedParkingId: string
+}
+
+export default function StartParkingForm({ vehicles, onSubmit, isLoading, buttonTitle, slotNumberTitle, vehicleSelectTitle, selectedParkingId }: StartParkingFormProps) {
   const [ firstVehicle ] = vehicles;
-  const [selectedVehicle, setVehicle] = useState({ id: firstVehicle.id, plateNumber: firstVehicle.plateNumber });
+  const [selectedPlateNumber, setVehicle] = useState(firstVehicle.plateNumber);
   const [slotNumber, setSlotNumber] = useState('');
   const slotNumberIsValid = isSlotNumberValid(slotNumber);
+  const createInvoiceData: CreateInvoiceMutationVariables = {
+    input: {
+      parkingID: selectedParkingId,
+      slotNumber,
+      plateNumber: selectedPlateNumber
+    }
+  };
 
   return (
     <View>
-      <VehicleSelector vehicles={vehicles} setVehicle={setVehicle} selectedVehicle={selectedVehicle} vehicleSelectTitle={vehicleSelectTitle} />
+      <VehicleSelector vehicles={vehicles} setVehicle={setVehicle} selectedPlateNumber={selectedPlateNumber} vehicleSelectTitle={vehicleSelectTitle} />
 
       <View style={{ marginBottom: 20 }}>
         <Text style={styles.grayColor}>{slotNumberTitle}</Text>
@@ -76,10 +79,7 @@ export default function StartParkingForm({ vehicles, onSubmit, isLoading, button
         title={buttonTitle}
         disabled={!slotNumberIsValid || isLoading}
         onPress={() => {
-          onSubmit({
-            slotNumber,
-            vehicleId: selectedVehicle.id, 
-            plateNumber: selectedVehicle.plateNumber });
+          onSubmit(createInvoiceData);
         }}
       />
     </View>
