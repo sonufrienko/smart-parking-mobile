@@ -7,11 +7,12 @@ import { getOpeningHoursFormatted } from '../utils/dateTime';
 import styles from './ParkingDetailsStyles';
 import StartParkingForm from './StartParkingForm';
 import ParkingDetailsSection from './ParkingDetailsSection';
+import { Parking } from '../types'
 
-function ParkingInfo({ parking }) {
-  const { title, availability, rate, address, opening_hours } = parking;
-  const addressFormatted = `${address.line1},\n${address.postal_code} ${address.city}`;
-  const openingHoursFormatted = getOpeningHoursFormatted(opening_hours);
+function ParkingInfo({ parking }: { parking: Parking }) {
+  const { title, rate, address, openingHours, freeSlots } = parking;
+  const addressFormatted = `${address.line1},\n${address.postalCode} ${address.city}`;
+  const openingHoursFormatted = getOpeningHoursFormatted(openingHours);
 
   return <ParkingDetailsSection
       title={title}
@@ -20,15 +21,15 @@ function ParkingInfo({ parking }) {
       priceDescription='hour'
       buttomLeftText={openingHoursFormatted}
       buttomLeftTitle='Opening Hours'
-      buttomRightText={availability}
+      buttomRightText={freeSlots}
       buttomRightTitle='Available Slot'
     />
 }
 
 type ParkingDetailsContainerProps = ScreenProps & {
   map: {
-    selectedParkingId: number,
-    parkingList: any[]
+    selectedParkingId: string,
+    parkingList: Array<Parking> | null;
   },
   account: {
     vehicleList: any[]
@@ -54,7 +55,7 @@ function ParkingDetailsContainer(props: ParkingDetailsContainerProps) {
     startParking 
   } = props;
 
-  const selectedParking = parkingList.find(item => item.id === selectedParkingId);
+  const selectedParking = parkingList.find(item => item.parkingID === selectedParkingId);
 
   return (
     <ScrollView>
