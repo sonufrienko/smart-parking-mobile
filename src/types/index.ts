@@ -63,3 +63,84 @@ export enum ActionType {
   FETCH_PARKING_SUCCESS = 'FETCH_PARKING_SUCCESS',
   FETCH_PARKING_FAILURE = 'FETCH_PARKING_FAILURE'
 }
+
+export type CreateInvoiceInput = {
+  parkingID?: string | null,
+  slotNumber?: string | null,
+  plateNumber?: string | null,
+};
+
+export type CloseInvoiceInput = {
+  parkingID?: string | null,
+  invoiceID?: string | null,
+};
+
+export type CreateInvoiceMutationVariables = {
+  input: CreateInvoiceInput,
+};
+
+export type CloseInvoiceMutationVariables = {
+  input: CloseInvoiceInput,
+};
+
+export type Invoice = {
+  __typename: "Invoice",
+  parkingID: string | null,
+  invoiceID: string | null,
+  slotNumber: string | null,
+  dateFrom: string | null,
+  dateTo: string | null,
+  plateNumber: string | null,
+  price: number | null
+}
+
+export type CreateInvoiceResponse = {
+  data: {
+    createInvoice: Invoice | null,
+  };
+  errors: Array<{ message: string }> | null;
+};
+
+export type CloseInvoiceResponse = {
+  data: {
+    closeInvoice: Invoice | null,
+  };
+  errors: Array<{ message: string }> | null;
+};
+
+export type ParkingState = {
+  history: Array<Invoice | null> | null,
+  activeTicket: Invoice | null,
+  loadingStartParking: boolean,
+  loadingFinishParking: boolean
+}
+
+export type MapState = {
+  loading: boolean,
+  selectedParkingId: string | null,
+  parkingList: Array<Parking>
+}
+
+export type User = {
+  userID: string,
+  fullName: string,
+  vehicles: Array<Vehicle>,
+  invoices: Array<Invoice> | null
+}
+
+export type AccountState = {
+  user: User
+}
+
+export type Action = {
+  type: ActionType,
+  payload?: any,
+  invoice?: Invoice | null,
+  user?: User | null
+}
+
+export type Vehicle = {
+  make: string,
+  model: string
+  plateNumber: string
+}
