@@ -13,7 +13,17 @@ export const parkingListWithoutSlots = `query Parking {
       latitude
       longitude
     }
-    openingHours
+    openingHours {
+      open {
+        day
+        time
+      }
+      close {
+        day
+        time
+      }
+    }
+    freeSlots
     rate
     title
   }

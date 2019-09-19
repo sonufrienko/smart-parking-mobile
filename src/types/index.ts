@@ -15,9 +15,22 @@ export type Parking = {
     latitude: number | null,
     longitude: number | null,
   },
-  openingHours: string | null,
+  openingHours: Array<{
+    __typename: "WorkDay",
+    open: {
+      __typename: "DayAndTime",
+      day: number,
+      time: string | null,
+    } | null,
+    close: {
+      __typename: "DayAndTime",
+      day: number,
+      time: string | null,
+    } | null,
+  } | null> | null,
   rate: number | null,
   title: string,
+  freeSlots: number,
   slots: Array<{
     __typename: "Slot",
     parkingID: string | null,
@@ -32,4 +45,21 @@ export type ParkingResponse = {
     parking: Array<Parking> | null
   };
   errors: Array<{ message: string }> | null;
+}
+
+export enum ActionType {
+  SELECTED_PARKING = 'SELECTED_PARKING',
+  CLEAR_SELECTED_PARKING = 'CLEAR_SELECTED_PARKING',
+  FETCH_USER_PENDING = 'FETCH_USER_PENDING',
+  FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS',
+  FETCH_USER_FAILURE = 'FETCH_USER_FAILURE',
+  START_PARKING_PENDING = 'START_PARKING_PENDING',
+  START_PARKING_SUCCESS = 'START_PARKING_SUCCESS',
+  START_PARKING_FAILURE = 'START_PARKING_FAILURE',
+  FINISH_PARKING_PENDING = 'FINISH_PARKING_PENDING',
+  FINISH_PARKING_SUCCESS = 'FINISH_PARKING_SUCCESS',
+  FINISH_PARKING_FAILURE = 'FINISH_PARKING_FAILURE',
+  FETCH_PARKING_PENDING = 'FETCH_PARKING_PENDING',
+  FETCH_PARKING_SUCCESS = 'FETCH_PARKING_SUCCESS',
+  FETCH_PARKING_FAILURE = 'FETCH_PARKING_FAILURE'
 }
