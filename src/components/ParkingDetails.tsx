@@ -7,7 +7,7 @@ import { getOpeningHoursFormatted } from '../utils/dateTime';
 import styles from './ParkingDetailsStyles';
 import StartParkingForm from './StartParkingForm';
 import ParkingDetailsSection from './ParkingDetailsSection';
-import { Parking } from '../types'
+import { Parking, CreateInvoiceMutationVariables, MapState, AccountState, ParkingState } from '../types'
 
 function ParkingInfo({ parking }: { parking: Parking }) {
   const { title, rate, address, openingHours, freeSlots } = parking;
@@ -27,17 +27,10 @@ function ParkingInfo({ parking }: { parking: Parking }) {
 }
 
 type ParkingDetailsContainerProps = ScreenProps & {
-  map: {
-    selectedParkingId: string,
-    parkingList: Array<Parking> | null;
-  },
-  account: {
-    vehicleList: any[]
-  },
-  parking: {
-    loadingStartParking: boolean
-  },
-  startParking(): void
+  map: MapState,
+  account: AccountState,
+  parking: ParkingState,
+  startParking(data: CreateInvoiceMutationVariables): void
 }
 
 function ParkingDetailsContainer(props: ParkingDetailsContainerProps) {
@@ -47,7 +40,7 @@ function ParkingDetailsContainer(props: ParkingDetailsContainerProps) {
       parkingList 
     }, 
     account: { 
-      vehicleList 
+      user: { vehicles }
     }, 
     parking: { 
       loadingStartParking 
@@ -63,8 +56,9 @@ function ParkingDetailsContainer(props: ParkingDetailsContainerProps) {
         <ParkingInfo parking={selectedParking} />
         <StartParkingForm
           isLoading={loadingStartParking}
-          vehicles={vehicleList}
+          vehicles={vehicles}
           onSubmit={startParking}
+          selectedParkingId={selectedParkingId}
           buttonTitle='Start Parking'
           slotNumberTitle='Parking slot number'
           vehicleSelectTitle='Select a vehicle'
@@ -77,9 +71,9 @@ function ParkingDetailsContainer(props: ParkingDetailsContainerProps) {
 const mapStateToProps = ({ map, account, parking }) => ({ map, account, parking });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  startParking: ({ vehicleId, plateNumber, slotNumber }) => {
+  startParking: (data: CreateInvoiceMutationVariables) => {
     const { navigation } = ownProps;
-    dispatch(actions.startParking({ vehicleId, plateNumber, slotNumber, navigation }));
+    dispatch(actions.startParking({ navigation, data }));
   }
 });
 

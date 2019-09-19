@@ -1,7 +1,15 @@
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import * as mutations from '../graphql/mutations';
 import * as queries from '../graphql/queries';
-import { ParkingResponse, ActionType } from '../types';
+import { 
+  ParkingResponse, 
+  ActionType,
+  Action,
+  CreateInvoiceMutationVariables,
+  CloseInvoiceMutationVariables ,
+  CreateInvoiceResponse,
+  CloseInvoiceResponse
+} from '../types';
 
 export const selectParking = (parkingId) => {
   return {
@@ -10,36 +18,7 @@ export const selectParking = (parkingId) => {
   }
 }
 
-type StartParking = {
-  vehicleId: number,
-  plateNumber: string,
-  slotNumber: string,
-  navigation: any
-}
-
-type StartParkingInput = {
-  UserID: string,
-  PlateNumber: string,
-  SlotNumber: string
-};
-
-type StartParkingMutation = {
-  startParking:  {
-    Id: string,
-    UserID: string | null,
-    PlateNumber: string | null,
-    DateFrom: number | null,
-    DateTo: number | null,
-    Price: number | null,
-  } | null,
-};
-
-type FinishParkingInput = {
-  UserID: string
-  InvoiceID: string
-}
-
-export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }: StartParking) => {
+export const startParking = ({ navigation, data  }: { navigation: any, data: CreateInvoiceMutationVariables }) => {
   return async (dispatch, getState) => {
     dispatch({
        type: ActionType.START_PARKING_PENDING 
@@ -50,31 +29,22 @@ export const startParking = ({ vehicleId, plateNumber, slotNumber, navigation }:
       map: { selectedParkingId } 
     } = getState();
     
-    try {
-      const input: StartParkingInput = {
-        UserID: user.id,
-        PlateNumber: plateNumber,
-        SlotNumber: slotNumber
-      };
-      
-      const response = await API.graphql(graphqlOperation(mutations.startParking, { input }));
-      const data: StartParkingMutation = response.data;
-      const invoice = data.startParking;
+    try {  
+      const response: CreateInvoiceResponse = await API.graphql(graphqlOperation(mutations.createInvoice, data));
+      const { data: { createInvoice: invoice } } = response;
 
       dispatch({
         type: ActionType.START_PARKING_SUCCESS,
         invoice: {
-          invoiceId: invoice.Id,
-          dateFrom: invoice.DateFrom,
-          dateTo: invoice.DateTo,
-          plateNumber: invoice.PlateNumber,
-          price: invoice.Price,
-          userID: invoice.UserID,
-          slotNumber,
-          vehicleId,
-          parkingId: selectedParkingId
+          parkingID: invoice.parkingID,
+          invoiceID: invoice.invoiceID,
+          slotNumber: invoice.slotNumber,
+          dateFrom: invoice.dateFrom,
+          dateTo: invoice.dateTo,
+          plateNumber: invoice.plateNumber,
+          price: invoice.price
         }
-      });
+      } as Action);
 
       navigation.popToTop();
       navigation.navigate('ParkingHome');
@@ -90,18 +60,17 @@ export const finishParking = () => {
        type: ActionType.FINISH_PARKING_PENDING 
     });
 
-    const { 
-      account: { user }, 
-      parking: { activeTicket } 
-    } = getState();
+    const { parking: { activeTicket } } = getState();
     
     try {
-      const input: FinishParkingInput = {
-        UserID: user.id,
-        InvoiceID: activeTicket.invoiceId
+      const data: CloseInvoiceMutationVariables = {
+        input: {
+          parkingID: activeTicket.parkingID,
+          invoiceID: activeTicket.invoiceID
+        }
       };
       
-      await API.graphql(graphqlOperation(mutations.finishParking, { input }));
+      await API.graphql(graphqlOperation(mutations.closeInvoice, data));
 
       dispatch({ type: ActionType.FINISH_PARKING_SUCCESS });
     } catch(error) {

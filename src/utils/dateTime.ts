@@ -19,10 +19,10 @@ const getOpenStatus = ({ openHours, openMinutes, closeHours, closeMinutes }): bo
   return currentTime >= openTime && currentTime <= closeTime;
 }
 
-export function getOpeningHoursFormatted(opening_hours: OpeningDays[]): string {
+export function getOpeningHoursFormatted(openingHours: Array<OpeningDays> = []): string {
   const currentDate = new Date();
   const currentDay = currentDate.getDay();
-  const day = opening_hours.find(item => item.open.day === currentDay);
+  const day = openingHours.find(item => item.open.day === currentDay);
 
   if (!day)
     return 'Closed';
