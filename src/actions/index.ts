@@ -1,4 +1,4 @@
-import { Auth, API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import * as mutations from '../graphql/mutations';
 import * as queries from '../graphql/queries';
 import { 
@@ -8,7 +8,7 @@ import {
   CreateInvoiceMutationVariables,
   CloseInvoiceMutationVariables ,
   CreateInvoiceResponse,
-  CloseInvoiceResponse
+  MeResponse
 } from '../types';
 
 export const selectParking = (parkingId) => {
@@ -23,11 +23,6 @@ export const startParking = ({ navigation, data  }: { navigation: any, data: Cre
     dispatch({
        type: ActionType.START_PARKING_PENDING 
     });
-
-    const { 
-      account: { user }, 
-      map: { selectedParkingId } 
-    } = getState();
     
     try {  
       const response: CreateInvoiceResponse = await API.graphql(graphqlOperation(mutations.createInvoice, data));
@@ -86,12 +81,10 @@ export const fetchUser = () => {
     });
     
     try {
-      const cognitoUser = await Auth.currentAuthenticatedUser();
-      dispatch({ type: ActionType.FETCH_USER_SUCCESS, user: {
-        id: cognitoUser.attributes.sub,
-        email: cognitoUser.attributes.email,
-        phone: cognitoUser.attributes.phone_number
-      } });
+      const response: MeResponse = await API.graphql(graphqlOperation(queries.me));
+      const { data: { me: user } } = response;
+
+      dispatch({ type: ActionType.FETCH_USER_SUCCESS, user });
     } catch(error) {
       dispatch({ type: ActionType.FETCH_USER_FAILURE, error });
     }
