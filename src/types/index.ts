@@ -108,6 +108,13 @@ export type CloseInvoiceResponse = {
   errors: Array<{ message: string }> | null;
 };
 
+export type MeResponse = {
+  data: {
+    me: User | null,
+  };
+  errors: Array<{ message: string }> | null;
+};
+
 export type ParkingState = {
   history: Array<Invoice | null> | null,
   activeTicket: Invoice | null,
@@ -124,6 +131,8 @@ export type MapState = {
 export type User = {
   userID: string,
   fullName: string,
+  email: string,
+  phone: string,
   vehicles: Array<Vehicle>,
   invoices: Array<Invoice> | null
 }

@@ -28,3 +28,27 @@ export const parkingListWithoutSlots = `query Parking {
     title
   }
 }`
+
+export const me = `query Me {
+  me {
+    userID
+    fullName
+    email
+    phone
+    vehicles {
+      make
+      model
+      plateNumber
+    }
+    invoices {
+      parkingID
+      invoiceID
+      slotNumber
+      dateFrom
+      dateTo
+      plateNumber
+      price
+    }
+  }
+}
+`;
