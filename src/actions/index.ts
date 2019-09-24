@@ -7,8 +7,7 @@ import {
   Action,
   CreateInvoiceMutationVariables,
   CloseInvoiceMutationVariables ,
-  CreateInvoiceResponse,
-  CloseInvoiceResponse
+  CreateInvoiceResponse
 } from '../types';
 
 export const selectParking = (parkingId) => {
@@ -23,11 +22,6 @@ export const startParking = ({ navigation, data  }: { navigation: any, data: Cre
     dispatch({
        type: ActionType.START_PARKING_PENDING 
     });
-
-    const { 
-      account: { user }, 
-      map: { selectedParkingId } 
-    } = getState();
     
     try {  
       const response: CreateInvoiceResponse = await API.graphql(graphqlOperation(mutations.createInvoice, data));
