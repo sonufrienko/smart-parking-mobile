@@ -1,45 +1,100 @@
 import React from 'react'
-import { Text, View, ScrollView, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, FlatList, SafeAreaView, TouchableNativeFeedback } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { User, AccountState } from '../types';
+
+const ACCOUNT_ROUTES = [
+  {
+    title: 'Vehicles',
+    route: 'VehicleList'
+  }, {
+    title: 'Payment Methods',
+    route: 'PaymentList'
+  }
+]
+
+type Route = {
+  title: string,
+  route: string
+}
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  details: {
+    padding: 20
+  },
+  grayColor: {
+    color: '#acacac'
+  },
+  list: {
+    borderTopWidth: 1,
+    borderTopColor: '#eeeeee',
+  },
+  item: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    flexDirection: 'row',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eeeeee',
+    justifyContent: 'space-between'
   }
 });
 
 function Account({ account }: { account: AccountState }) {
   const user = account.user;
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
-      <UserDetails user={user} />
-      <VehicleList user={user} />
+      {user && <UserDetails user={user} />}
+      {user && <UserMenuWithNavigation routes={ACCOUNT_ROUTES} />}
     </ScrollView>
   )
 }
 
-function UserDetails({ user: { userID, fullName, email, phone } }: { user: User }) {
+function UserDetails({ user: { fullName, email, phone } }: { user: User }) {
   return (
-    <View>
-      <Text>ID: {userID}</Text>
-      <Text>Name: {fullName}</Text>
-      <Text>Email: {email}</Text>
-      <Text>Phone: {phone}</Text>
+    <View style={styles.details}>
+      <Text style={{ fontSize: 24 }}>{fullName}</Text>
+      <Text style={styles.grayColor}>{email}</Text>
+      <Text style={styles.grayColor}>Phone: {phone}</Text>
     </View>
   )
 }
 
-function VehicleList({ user: { vehicles } }: { user: User }) {
+function UserMenuItem({ title, onPress }) {
   return (
-    <View>
-      {vehicles.map(item => <Text>{item.make} {item.model}, {item.plateNumber}</Text>)}
-    </View>
+    <TouchableNativeFeedback onPress={onPress}>
+      <View style={styles.item}>
+        <Text>{title}</Text>
+        <View><Icon name="chevron-right" size={26} /></View>
+      </View>
+    </TouchableNativeFeedback>
   )
 }
+
+function UserMenu({ routes, navigation }: { routes: Route[], navigation: any }) {
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        style={styles.list}
+        data={routes}
+        renderItem={({ item }) => (
+          <UserMenuItem
+            title={item.title}
+            onPress={() => navigation.navigate(item.route)}
+          />
+        )}
+        keyExtractor={route => route.route}
+      />
+    </SafeAreaView>
+  )
+}
+
+const UserMenuWithNavigation = withNavigation(UserMenu);
 
 const mapStateToProps = ({ account }) => ({ account });
-export default connect(mapStateToProps, null)(withNavigation(Account));
+export default connect(mapStateToProps, null)(Account);
