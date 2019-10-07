@@ -7,6 +7,8 @@ import ParkingHomeScreen from '../screens/ParkingHome';
 import AccountHomeScreen from '../screens/AccountHome';
 import ParkingDetailsScreen from '../screens/ParkingDetails';
 import ParkingHistoryScreen from '../screens/ParkingHistory';
+import VehicleListScreen from '../screens/VehicleList';
+import PaymentListScreen from '../screens/PaymentList';
 
 const MapStack = createStackNavigator(
   {
@@ -36,7 +38,9 @@ const ParkingStack = createStackNavigator(
 
 const AccountStack = createStackNavigator(
   {
-    AccountHome: AccountHomeScreen
+    AccountHome: AccountHomeScreen,
+    VehicleList: VehicleListScreen,
+    PaymentList: PaymentListScreen
   },
   {
     initialRouteName: 'AccountHome',
