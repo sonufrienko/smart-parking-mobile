@@ -1,4 +1,4 @@
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
 import * as mutations from '../graphql/mutations';
 import * as queries from '../graphql/queries';
 import { 
@@ -8,7 +8,9 @@ import {
   CreateInvoiceMutationVariables,
   CloseInvoiceMutationVariables ,
   CreateInvoiceResponse,
-  MeResponse
+  MeResponse,
+  CognitoUser,
+  User
 } from '../types';
 
 export const selectParking = (parkingId) => {
@@ -81,8 +83,18 @@ export const fetchUser = () => {
     });
     
     try {
-      const response: MeResponse = await API.graphql(graphqlOperation(queries.me));
-      const { data: { me: user } } = response;
+      const [ cognitoUser, response ]: [ CognitoUser, MeResponse ] = await Promise.all([
+        Auth.currentAuthenticatedUser(),
+        API.graphql(graphqlOperation(queries.me))
+      ]);
+
+      const { data: { me } } = response;
+
+      const user: User = {
+        ...me,
+        email: cognitoUser.attributes.email,
+        phone: cognitoUser.attributes.phone_number
+      }
 
       dispatch({ type: ActionType.FETCH_USER_SUCCESS, user });
     } catch(error) {
