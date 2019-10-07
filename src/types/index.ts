@@ -153,3 +153,13 @@ export type Vehicle = {
   model: string
   plateNumber: string
 }
+
+export type CognitoUser = {
+  attributes: {
+    email: string,
+    email_verified: boolean,
+    phone_number: string,
+    phone_number_verified: boolean,
+    sub: string
+  }
+}
