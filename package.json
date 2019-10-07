@@ -10,6 +10,7 @@
   "dependencies": {
     "aws-amplify": "^1.1.36",
     "aws-amplify-react-native": "^2.1.16",
+    "dayjs": "^1.8.16",
     "expo": "^35.0.0",
     "expo-location": "^7.0.0",
     "humanize-duration": "^3.20.1",
