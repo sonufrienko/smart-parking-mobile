@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import styles from './ParkingDetailsStyles';
+import styles from './styles';
 
 export default function ParkingDetailsSection({ title, subtitle, price, priceDescription, buttomLeftText, buttomLeftTitle, buttomRightText, buttomRightTitle }) {
   return (
