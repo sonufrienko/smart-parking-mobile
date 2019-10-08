@@ -141,6 +141,12 @@ export type AccountState = {
   user: User
 }
 
+export type AppState = {
+  map: MapState,
+  account: AccountState,
+  parking: ParkingState
+}
+
 export type Action = {
   type: ActionType,
   payload?: any,

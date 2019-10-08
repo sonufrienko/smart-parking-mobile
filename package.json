@@ -8,8 +8,8 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "aws-amplify": "^1.1.36",
-    "aws-amplify-react-native": "^2.1.16",
+    "aws-amplify": "^1.1.40",
+    "aws-amplify-react-native": "^2.1.19",
     "dayjs": "^1.8.16",
     "expo": "^35.0.0",
     "expo-location": "^7.0.0",
