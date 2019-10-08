@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import styles from './ParkingDetailsStyles';
+import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import humanizeDuration from 'humanize-duration';
 

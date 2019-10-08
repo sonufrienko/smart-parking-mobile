@@ -4,7 +4,7 @@ import { ScreenProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { getOpeningHoursFormatted } from '../utils/dateTime';
-import styles from './ParkingDetailsStyles';
+import styles from './styles';
 import StartParkingForm from './StartParkingForm';
 import ParkingDetailsSection from './ParkingDetailsSection';
 import { Parking, CreateInvoiceMutationVariables, MapState, AccountState, ParkingState } from '../types'

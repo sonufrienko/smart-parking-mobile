@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, Button, TextInput, Picker } from 'react-native';
-import styles from './ParkingDetailsStyles';
+import styles from './styles';
 import { CreateInvoiceMutationVariables, Vehicle } from '../types';
 
 type VehicleSelectorProps = {
