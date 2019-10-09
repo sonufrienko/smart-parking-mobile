@@ -1,0 +1,20 @@
+name: React Application
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Use Node.js v10
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: Install
+        run: npm install; echo "export default {};" > aws-exports.js
+      - name: Test
+        run: npm test
