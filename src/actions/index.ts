@@ -63,6 +63,7 @@ export const finishParking = () => async (dispatch, getState) => {
     };
 
     await API.graphql(graphqlOperation(mutations.closeInvoice, data));
+    dispatch(fetchUser());
 
     dispatch({ type: ActionType.FINISH_PARKING_SUCCESS });
   } catch (error) {
