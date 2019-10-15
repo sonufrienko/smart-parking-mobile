@@ -4,7 +4,8 @@ const initialState: ParkingState = {
   history: [],
   activeTicket: null,
   loadingStartParking: false,
-  loadingFinishParking: false
+  loadingFinishParking: false,
+  startParkingError: null,
 }
 
 export default (state: ParkingState = initialState, action: Action): ParkingState => {
@@ -25,7 +26,14 @@ export default (state: ParkingState = initialState, action: Action): ParkingStat
     case ActionType.START_PARKING_FAILURE:
       return {
         ...state,
-        loadingStartParking: false
+        loadingStartParking: false,
+        startParkingError: action.error
+      }
+
+    case ActionType.START_PARKING_FAILURE_CLOSE:
+      return {
+        ...state,
+        startParkingError: null
       }
 
     case ActionType.FINISH_PARKING_PENDING:

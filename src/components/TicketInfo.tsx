@@ -39,7 +39,7 @@ export default function TicketInfo({ vehicle, invoice, parking }) {
   return (
     <View>
       <TicketField iconName="directions-car" text={vehicleName} />
-      <TicketField iconName="local-parking" text={`Parking slot ${slotNumber}`} />
+      <TicketField iconName="local-parking" text={`Parking slot: ${slotNumber}`} />
       <TicketField iconName="access-time" text={parkingDurationFormatted} />
       <TicketField iconName="attach-money" text={`$ ${parkingCost}`} isLast={true} />
     </View>

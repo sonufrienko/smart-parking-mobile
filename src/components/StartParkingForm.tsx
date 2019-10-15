@@ -57,7 +57,7 @@ export default function StartParkingForm({ vehicles, onSubmit, isLoading, button
   const createInvoiceData: CreateInvoiceMutationVariables = {
     input: {
       parkingID: selectedParkingId,
-      slotNumber,
+      slotNumber: slotNumber.toLowerCase(),
       plateNumber: selectedPlateNumber
     }
   };

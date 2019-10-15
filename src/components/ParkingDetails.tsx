@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Alert } from 'react-native';
 import { ScreenProps, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
@@ -7,7 +7,7 @@ import { getOpeningHoursFormatted } from '../utils/dateTime';
 import styles from './styles';
 import StartParkingForm from './StartParkingForm';
 import ParkingDetailsSection from './ParkingDetailsSection';
-import { Parking, CreateInvoiceMutationVariables, MapState, AccountState, ParkingState } from '../types'
+import { Parking, CreateInvoiceMutationVariables, MapState, AccountState, ParkingState } from '../types';
 
 function ParkingInfo({ parking }: { parking: Parking }) {
   const { title, rate, address, openingHours, freeSlots } = parking;
@@ -30,7 +30,8 @@ type ParkingDetailsContainerProps = ScreenProps & {
   map: MapState,
   account: AccountState,
   parking: ParkingState,
-  startParking(data: CreateInvoiceMutationVariables): void
+  startParking(data: CreateInvoiceMutationVariables): void,
+  closeStartParkingError(): void,
 }
 
 function ParkingDetailsContainer(props: ParkingDetailsContainerProps) {
@@ -43,26 +44,40 @@ function ParkingDetailsContainer(props: ParkingDetailsContainerProps) {
       user: { vehicles }
     }, 
     parking: { 
-      loadingStartParking 
+      loadingStartParking,
+      startParkingError,
     }, 
-    startParking 
+    startParking,
+    closeStartParkingError,
   } = props;
 
   const selectedParking = parkingList.find(item => item.parkingID === selectedParkingId);
+  const parkingIsClosed = getOpeningHoursFormatted(selectedParking.openingHours) === 'Closed';
+  const showError = startParkingError && startParkingError.length;
+
+  if (showError) {
+    Alert.alert(
+      'Error',
+      startParkingError,
+      [{ text: 'OK', onPress: () => closeStartParkingError() }],
+      { cancelable: false },
+    );
+  }
 
   return (
     <ScrollView>
       <View style={styles.container}>
         <ParkingInfo parking={selectedParking} />
-        <StartParkingForm
-          isLoading={loadingStartParking}
-          vehicles={vehicles}
-          onSubmit={startParking}
-          selectedParkingId={selectedParkingId}
-          buttonTitle='Start Parking'
-          slotNumberTitle='Parking slot number'
-          vehicleSelectTitle='Select a vehicle'
-        />
+        { !parkingIsClosed && <StartParkingForm
+            isLoading={loadingStartParking}
+            vehicles={vehicles}
+            onSubmit={startParking}
+            selectedParkingId={selectedParkingId}
+            buttonTitle='Start Parking'
+            slotNumberTitle='Parking slot number'
+            vehicleSelectTitle='Select a vehicle'
+          />
+        }
       </View>
     </ScrollView>
   );
@@ -74,7 +89,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   startParking: (data: CreateInvoiceMutationVariables) => {
     const { navigation } = ownProps;
     dispatch(actions.startParking({ navigation, data }));
-  }
+  },
+  closeStartParkingError: () => {
+    dispatch(actions.closeStartParkingError());
+  },
 });
 
 export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(ParkingDetailsContainer));
