@@ -56,6 +56,7 @@ export enum ActionType {
   START_PARKING_PENDING = 'START_PARKING_PENDING',
   START_PARKING_SUCCESS = 'START_PARKING_SUCCESS',
   START_PARKING_FAILURE = 'START_PARKING_FAILURE',
+  START_PARKING_FAILURE_CLOSE = 'START_PARKING_FAILURE_CLOSE',
   FINISH_PARKING_PENDING = 'FINISH_PARKING_PENDING',
   FINISH_PARKING_SUCCESS = 'FINISH_PARKING_SUCCESS',
   FINISH_PARKING_FAILURE = 'FINISH_PARKING_FAILURE',
@@ -119,7 +120,8 @@ export type ParkingState = {
   history: Array<Invoice | null> | null,
   activeTicket: Invoice | null,
   loadingStartParking: boolean,
-  loadingFinishParking: boolean
+  loadingFinishParking: boolean,
+  startParkingError: string | null,
 }
 
 export type MapState = {
@@ -151,7 +153,8 @@ export type Action = {
   type: ActionType,
   payload?: any,
   invoice?: Invoice | null,
-  user?: User | null
+  user?: User | null,
+  error?: string | null,
 }
 
 export type Vehicle = {

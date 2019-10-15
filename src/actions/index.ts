@@ -43,9 +43,13 @@ export const startParking = ({ navigation, data }: { navigation: any, data: Crea
     navigation.popToTop();
     navigation.navigate('ParkingHome');
   } catch (error) {
-    dispatch({ type: ActionType.START_PARKING_FAILURE, error });
+    dispatch({ type: ActionType.START_PARKING_FAILURE, error: 'Please, double-check your parking slot number.' });
   }
 }
+
+export const closeStartParkingError = () => ({
+  type: ActionType.START_PARKING_FAILURE_CLOSE,
+});
 
 export const finishParking = () => async (dispatch, getState) => {
   dispatch({
