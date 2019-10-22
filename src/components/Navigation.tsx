@@ -9,6 +9,13 @@ import ParkingDetailsScreen from '../screens/ParkingDetails';
 import VehicleListScreen from '../screens/VehicleList';
 import PaymentListScreen from '../screens/PaymentList';
 
+const DEFAULT_NAVIGATION_OPTIONS = {
+  headerStyle: {
+    backgroundColor: '#1a73e8',
+  },
+  headerTintColor: '#fff',
+};
+
 const MapStack = createStackNavigator(
   {
     MapHome: MapHomeScreen,
@@ -18,7 +25,8 @@ const MapStack = createStackNavigator(
     initialRouteName: 'MapHome',
     navigationOptions: {
       title: 'Map'
-    }
+    },
+    defaultNavigationOptions: DEFAULT_NAVIGATION_OPTIONS,
   }
 );
 
@@ -30,7 +38,8 @@ const ParkingStack = createStackNavigator(
     initialRouteName: 'ParkingHome',
     navigationOptions: {
       title: 'Parking'
-    }
+    },
+    defaultNavigationOptions: DEFAULT_NAVIGATION_OPTIONS,
   }
 );
 
@@ -44,7 +53,8 @@ const AccountStack = createStackNavigator(
     initialRouteName: 'AccountHome',
     navigationOptions: {
       title: 'Account'
-    }
+    },
+    defaultNavigationOptions: DEFAULT_NAVIGATION_OPTIONS,
   }
 );
 
