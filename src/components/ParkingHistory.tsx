@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 });
 
 function InvoiceListItem({ invoice, parkingList, onPress }: { invoice: Invoice, parkingList: Array<Parking>, onPress: () => any }) {
-  const parkingStartTimeFormatted = dayjs(invoice.dateFrom).format('ddd, MMM D, h:mm a');
+  const parkingStartTimeFormatted = dayjs(Number(invoice.dateFrom)).format('ddd, MMM D, h:mm a');
   const parking = parkingList.find(p => p.parkingID === invoice.parkingID);
 
   if (!parking)
